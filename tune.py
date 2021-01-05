@@ -17,7 +17,7 @@ from train_faster_rcnn import get_dataset, get_dataloader, train
 
 def objective(trial):
     momentum = trial.suggest_uniform("momentum", 0, 1)
-    wd = trial.suggest_loguniform("wd", log(1e-5), log(100))
+    wd = trial.suggest_loguniform("wd", 1e-5, 100)
 
     space = dict(
         network="resnet50_v1b",
