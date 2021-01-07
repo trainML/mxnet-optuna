@@ -22,7 +22,7 @@ def objective(trial):
     space = dict(
         network="resnet50_v1b",
         dataset="voc",
-        save_prefix="",
+        save_prefix=f"{os.environ.get('TRAINML_OUTPUT_PATH')}/",
         horovod=False,
         amp=False,
         resume=False,
@@ -116,4 +116,4 @@ def objective(trial):
 
 if __name__ == "__main__":
     study = optuna.load_study(study_name="mxnet_pascal_voc_1", storage=os.environ.get("DB_CONNECTION_STRING"))
-    study.optimize(objective, n_trials=50)
+    study.optimize(objective, n_trials=50,gc_after_trial=True)
