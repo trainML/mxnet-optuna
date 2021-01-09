@@ -109,6 +109,8 @@ def objective(trial):
     name, values = eval_metric.get()
     idx = name.index("mAP")
 
+    [dev.empty_cache() for dev in ctx]
+
     trial.set_user_attr('mAP', values[idx])
 
     return 1 - values[idx]
