@@ -108,6 +108,12 @@ def objective(trial):
     train(net, train_data, val_data, eval_metric, batch_size, ctx, args)
     name, values = eval_metric.get()
     idx = name.index("mAP")
+    del net
+    del train_data
+    del val_data
+    del train_dataset
+    del val_dataset
+    del eval_metric
 
     [dev.empty_cache() for dev in ctx]
 
