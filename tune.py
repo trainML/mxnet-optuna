@@ -1,6 +1,7 @@
 import pickle
 import time
 import os
+import subprocess
 import optuna
 from types import SimpleNamespace
 import sys
@@ -108,6 +109,8 @@ def objective(trial):
     train(net, train_data, val_data, eval_metric, batch_size, ctx, args)
     name, values = eval_metric.get()
     idx = name.index("mAP")
+
+    ## free memory for next run
     del net
     del train_data
     del val_data
@@ -117,6 +120,10 @@ def objective(trial):
 
     [dev.empty_cache() for dev in ctx]
 
+    for gpu_id in args.gpus.split(","):
+        subprocess.run(f"nvidia-smi --gpu-reset -i {gpu_id}")
+
+    ## return data to optuna
     trial.set_user_attr('mAP', values[idx])
 
     return 1 - values[idx]
